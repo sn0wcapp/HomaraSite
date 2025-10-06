@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homara - Menu Interface</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/homarafavicon/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="assets/homarafavicon/favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom font files -->
+    <style>
+        @font-face {
+            font-family: 'BraunLinear';
+            src: url('assets/BraunLinear-Thin.woff2') format('woff2');
+            font-weight: 300;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'BraunLinear';
+            src: url('assets/BraunLinear-Light.woff2') format('woff2');
+            font-weight: 350;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'BraunLinear';
+            src: url('assets/BraunLinear-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'BraunLinear';
+            src: url('assets/BraunLinear-Medium.woff2') format('woff2');
+            font-weight: 500;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'BraunLinear';
+            src: url('assets/BraunLinear-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-display: swap;
+        }
+    </style>
+    
+    <!-- Menu Styles -->
+    <link rel="stylesheet" href="menu.css">
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-WtgN67M4vQN3BZXuJzkgAewPN_ZUoLw",
+            authDomain: "homara-77657.firebaseapp.com",
+            databaseURL: "https://homara-77657-default-rtdb.firebaseio.com",
+            projectId: "homara-77657",
+            storageBucket: "homara-77657.firebasestorage.app",
+            messagingSenderId: "664988780573",
+            appId: "1:664988780573:web:6d237b055d2af050319ef4",
+            measurementId: "G-PW4TDPPCFS"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Make Firebase auth functions available globally
+        window.firebaseAuth = auth;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.signOut = signOut;
+        window.onAuthStateChanged = onAuthStateChanged;
+    </script>
+</head>
+<body>
+    <!-- Sidebar Menu -->
+    <nav class="sidebar" id="sidebar">
+        <!-- Minimize Button (top left corner) -->
+        <div class="minimize-btn" id="minimizeBtn" title="Minimize menu"></div>
+
+        <!-- Pull Tab (for minimized state) -->
+        <div class="pull-tab" id="pullTab" title="Restore menu"></div>
+
+        <!-- Header Section: Hamburger Icon + Logo -->
+        <div class="sidebar-header">
+            <!-- Hamburger Menu Icon -->
+            <div class="menu-icon" id="menuIcon">
+                <div class="menu-icon-lines">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <!-- Tooltip for menu state -->
+                <div class="menu-tooltip" id="menuTooltip">Expand menu</div>
+            </div>
+            
+            <!-- Homara Logo -->
+            <div class="sidebar-logo">
+                <img src="assets/homarafavicon/whitelogo.png" alt="Homara Logo" class="logo-image">
+                <div class="logo-tooltip">Homara Loves You</div>
+            </div>
+        </div>
+
+        <!-- Sidebar Content -->
+        <div class="sidebar-content" id="sidebarContent">
+            <!-- Search Bar -->
+            <div class="search-section">
+                <div class="search-container" id="searchContainer">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Find a Community or User Page">
+                </div>
+            </div>
+
+            <!-- Menu Items Container -->
+            <div class="menu-items" id="menuItems">
+                <!-- Menu items will be populated by JavaScript -->
+            </div>
+
+            <!-- Point History Section -->
+            <div class="point-history-section" id="pointHistorySection">
+                <div class="section-title">Point History</div>
+                <div class="point-grid">
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                    <div class="point-square"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer Section: Auth Buttons + Bottom Menu Items -->
+        <div class="sidebar-footer" id="sidebarFooter">
+            <!-- Authentication/User Profile Section -->
+            <div class="auth-section" id="authSection">
+                <!-- Unauthenticated State - Auth Buttons -->
+                <div class="auth-buttons" id="authButtons">
+                    <button class="auth-btn signup-btn" id="signupBtn">Sign Up</button>
+                    <button class="auth-btn login-btn" id="loginBtn">Log In</button>
+                </div>
+
+                <!-- Authenticated State - User Profile -->
+                <div class="user-profile" id="userProfile" style="display: none;">
+                    <div class="user-profile-content">
+                        <div class="user-avatar" id="userAvatar">
+                            <img src="" alt="Profile Picture" id="userAvatarImg" style="display: none;">
+                            <div class="avatar-placeholder" id="avatarPlaceholder"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-welcome"> <span id="userDisplayName">User</span></div>
+                            <div class="user-title" id="userTitle">Builder</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Icon for Collapsed State -->
+                <div class="profile-icon-collapsed" id="profileIconCollapsed" style="display: none;">
+                    <img src="profile.png" alt="Profile" class="profile-icon-img">
+                </div>
+            </div>
+
+            <!-- Bottom Menu Items (Settings & Help) -->
+            <div class="bottom-menu-items" id="bottomMenuItems">
+                <!-- Bottom menu items will be populated by JavaScript -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content" id="mainContent">
+        <div class="content-placeholder">
+            <h1>Welcome to Homara</h1>
+            <p>This is the main content area. The sidebar menu is fully functional with four states:</p>
+            <ul>
+                <li><strong>Collapsed:</strong> Shows only icons (default state)</li>
+                <li><strong>Hover Expanded:</strong> Temporarily shows full menu on hover</li>
+                <li><strong>Pinned Expanded:</strong> Keeps menu open when clicked</li>
+                <li><strong>Minimized:</strong> Ultra-thin sliver with pull tab (click minimize button)</li>
+            </ul>
+            <p>Try hovering over the menu, clicking the hamburger icon, or using the minimize button!</p>
+
+            <!-- Font Weight Examples -->
+            <div class="font-examples">
+                <h2>BraunLinear Font Weight Examples</h2>
+                <div class="font-sample font-thin">This is BraunLinear Thin (300) - Used for "Homara Loves You" tooltip</div>
+                <div class="font-sample font-light">This is BraunLinear Light (350) - Lighter than regular, heavier than thin</div>
+                <div class="font-sample font-regular">This is BraunLinear Regular (400) - Default body text weight</div>
+                <div class="font-sample font-medium">This is BraunLinear Medium (500) - Used for menu items and buttons</div>
+                <div class="font-sample font-bold">This is BraunLinear Bold (700) - Used for headings and emphasis</div>
+
+                <h3>Interactive Elements</h3>
+                <p class="font-regular">Regular paragraph text with <span class="font-medium">medium weight highlights</span> and <span class="font-bold">bold emphasis</span>.</p>
+                <p class="font-thin">This entire paragraph uses the thin weight for a delicate appearance.</p>
+                <p class="font-light">This paragraph demonstrates the light weight for subtle text.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Authentication Modals -->
+    <div id="auth-overlay" class="auth-overlay">
+        <!-- Sign Up Modal -->
+        <div id="signup-modal" class="auth-modal">
+            <div class="auth-modal-header">
+                <h2>Sign Up</h2>
+                <button class="auth-close-btn" id="signup-close">&times;</button>
+            </div>
+            <form id="signup-form" class="auth-form">
+                <div class="auth-input-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required>
+                </div>
+                <div class="auth-input-group">
+                    <label for="signup-username">Username</label>
+                    <input type="text" id="signup-username" required>
+                </div>
+                <div class="auth-input-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required>
+                </div>
+                <button type="submit" class="auth-submit-btn">Create Account</button>
+                <div class="auth-error" id="signup-error"></div>
+                <div class="auth-switch">
+                    Already have an account? <a href="#" id="switch-to-login">Log In</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Log In Modal -->
+        <div id="login-modal" class="auth-modal">
+            <div class="auth-modal-header">
+                <h2>Log In</h2>
+                <button class="auth-close-btn" id="login-close">&times;</button>
+            </div>
+            <form id="login-form" class="auth-form">
+                <div class="auth-input-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="auth-input-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="auth-submit-btn">Log In</button>
+                <div class="auth-error" id="login-error"></div>
+                <div class="auth-switch">
+                    Don't have an account? <a href="#" id="switch-to-signup">Sign Up</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Edit Profile Modal -->
+        <div id="edit-profile-modal" class="auth-modal">
+            <div class="auth-modal-header">
+                <h2>Edit Profile</h2>
+                <button class="auth-close-btn" id="edit-profile-close">&times;</button>
+            </div>
+            <form id="edit-profile-form" class="edit-profile-form">
+                <!-- Profile Picture Section -->
+                <div class="profile-picture-section">
+                    <div class="profile-picture-preview" id="profilePicturePreview">
+                        <img src="" alt="Profile Picture" id="profilePictureImg" style="display: none;">
+                        <div class="profile-picture-placeholder" id="profilePicturePlaceholder">U</div>
+                    </div>
+                    <div class="profile-picture-upload">
+                        <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
+                        <button type="button" class="upload-btn" id="uploadBtn">Change Picture</button>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
+                            JPG, PNG, or GIF (max 5MB)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Information -->
+                <div class="auth-input-group">
+                    <label for="edit-username">Username</label>
+                    <input type="text" id="edit-username" required>
+                </div>
+                <div class="auth-input-group">
+                    <label for="edit-email">Email</label>
+                    <input type="email" id="edit-email" required readonly>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
+                        Email cannot be changed
+                    </div>
+                </div>
+                <div class="auth-input-group">
+                    <label for="edit-title">Title</label>
+                    <select id="edit-title" required>
+                        <option value="Builder">Builder</option>
+                        <option value="Founder">Founder</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="auth-submit-btn">Save Changes</button>
+                <div class="auth-error" id="edit-profile-error"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Menu JavaScript -->
+    <script src="menu.js"></script>
+
+    <!-- Authentication JavaScript -->
+    <script src="auth.js"></script>
+</body>
+</html>

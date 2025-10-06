@@ -1,0 +1,1538 @@
+/**
+ * Homara Menu System - Complete Styles
+ * Handles sidebar navigation with three-state behavior, animations, and responsive design
+ * 
+ * MENU STATES:
+ * 1. Collapsed (60px width) - Shows only icons
+ * 2. Hover Expanded (240px width) - Temporarily shows full menu on hover
+ * 3. Pinned Expanded (240px width) - Keeps menu open until clicked again
+ */
+
+/* ===== CSS CUSTOM PROPERTIES (VARIABLES) ===== */
+:root {
+    /* Color Palette - Dark Theme */
+    --bg-primary: #0a0a0a;           /* Deep black background */
+    --bg-secondary: #1a1a1a;         /* Slightly lighter black */
+    --bg-tertiary: #2a2a2a;          /* Medium dark gray */
+    --bg-quaternary: #3a3a3a;        /* Lighter dark gray */
+    
+    /* Text Colors */
+    --text-primary: #ffffff;          /* Primary white text */
+    --text-secondary: #e0e0e0;        /* Secondary light gray text */
+    --text-tertiary: #b0b0b0;         /* Tertiary gray text */
+    --text-muted: #808080;            /* Muted gray text */
+    
+    /* Border Colors */
+    --border-primary: #333333;        /* Main borders */
+    --border-secondary: #404040;      /* Secondary borders */
+    
+    /* Interactive Colors */
+    --surface-hover: #383838;         /* Hover state background */
+    --interactive-hover: #f5f5f5;     /* Interactive element hover */
+    
+    /* Typography */
+    --font-primary: 'BraunLinear', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-weight-thin: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+    
+    /* Spacing */
+    --space-1: 0.25rem;    /* 4px */
+    --space-2: 0.5rem;     /* 8px */
+    --space-3: 0.75rem;    /* 12px */
+    --space-4: 1rem;       /* 16px */
+    --space-5: 1.25rem;    /* 20px */
+    --space-6: 1.5rem;     /* 24px */
+    
+    /* Border Radius */
+    --radius-sm: 0.25rem;  /* 4px */
+    --radius-md: 0.5rem;   /* 8px */
+    --radius-lg: 0.75rem;  /* 12px */
+    
+    /* Transitions - Optimized for smooth animations, especially on macOS */
+    --transition-fast: 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    --transition-normal: 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    --transition-slow: 400ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    --transition-sidebar: 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Custom easing for sidebar */
+    
+    /* Menu Dimensions */
+    --sidebar-collapsed-width: 60px;
+    --sidebar-expanded-width: 240px;
+    --sidebar-minimized-width: 8px;
+}
+
+/* ===== GLOBAL STYLES ===== */
+
+/* Reset and base styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* ===== SIDEBAR CONTAINER ===== */
+
+/* Main sidebar container with three-state behavior */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: var(--sidebar-collapsed-width);
+    background-color: var(--bg-quaternary);
+    transition: width var(--transition-sidebar);
+    z-index: 1000;
+    overflow: hidden;
+    border-right: 1px solid var(--border-primary);
+    display: flex;
+    flex-direction: column;
+
+    /* Enhanced performance optimizations for macOS */
+    will-change: width, transform;
+    transform: translateZ(0); /* Force GPU acceleration */
+    -webkit-transform: translateZ(0); /* Safari/WebKit specific */
+    backface-visibility: hidden; /* Prevent flickering */
+    -webkit-backface-visibility: hidden;
+    perspective: 1000px; /* Enable 3D rendering context */
+    -webkit-perspective: 1000px;
+    contain: layout style paint; /* CSS containment for better performance */
+}
+
+/* Hover state - temporarily expand sidebar */
+.sidebar:hover {
+    width: var(--sidebar-expanded-width);
+}
+
+/* Pinned state - keep sidebar expanded */
+.sidebar.expanded {
+    width: var(--sidebar-expanded-width);
+}
+
+/* Minimized state - ultra-thin sidebar with pull tab */
+.sidebar.minimized {
+    width: var(--sidebar-minimized-width);
+    background-color: var(--bg-quaternary);
+}
+
+/* Hide all content when minimized except pull tab */
+.sidebar.minimized .sidebar-header,
+.sidebar.minimized .sidebar-content,
+.sidebar.minimized .sidebar-footer {
+    display: none;
+}
+
+/* ===== MINIMIZE BUTTON ===== */
+
+/* Minimize button in top left corner */
+.minimize-btn {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    width: 20px;
+    height: 20px;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Show minimize button when sidebar is expanded */
+.sidebar:hover .minimize-btn,
+.sidebar.expanded .minimize-btn {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Minimize button hover effect - removed animation, keep simple */
+.minimize-btn:hover {
+    background-color: var(--surface-hover);
+}
+
+/* Minimize button icon */
+.minimize-btn::before {
+    content: '−';
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* ===== PULL TAB ===== */
+
+/* Pull tab for minimized state */
+.pull-tab {
+    position: absolute;
+    top: 50%;
+    right: -12px; /* Extend beyond sidebar edge */
+    width: 24px;
+    height: 60px;
+    background-color: var(--bg-quaternary);
+    border: 1px solid var(--border-primary);
+    border-left: none;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    cursor: pointer;
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    transition: all var(--transition-fast);
+    z-index: 1001;
+}
+
+/* Show pull tab only when minimized */
+.sidebar.minimized .pull-tab {
+    display: flex;
+}
+
+/* Pull tab hover effect */
+.pull-tab:hover {
+    background-color: var(--surface-hover);
+    width: 28px;
+}
+
+/* Pull tab icon */
+.pull-tab::before {
+    content: '▶';
+    color: var(--text-primary);
+    font-size: 10px;
+    transform: rotate(0deg);
+    transition: transform var(--transition-fast);
+}
+
+/* Pull tab hover icon animation */
+.pull-tab:hover::before {
+    transform: rotate(0deg) scale(1.2);
+}
+
+/* ===== SIDEBAR HEADER ===== */
+
+/* Header container for hamburger icon and logo */
+.sidebar-header {
+    padding: var(--space-3);
+    height: auto;
+    min-height: 80px; /* Increased to accommodate larger logo */
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: visible; /* Allow tooltips to show */
+}
+
+/* ===== HAMBURGER MENU ICON ===== */
+
+/* Hamburger menu icon container */
+.menu-icon {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: background-color var(--transition-normal);
+    flex-shrink: 0; /* Prevent shrinking */
+    margin-left: 2px; /* Center align with menu items below */
+}
+
+/* Hover effect for hamburger icon */
+.menu-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Container for the three hamburger lines */
+.menu-icon-lines {
+    width: 18px;
+    height: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Individual hamburger lines */
+.menu-icon span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: var(--text-primary);
+    border-radius: 1px;
+    transition: all var(--transition-fast);
+}
+
+/* Menu tooltip - styled to match minimize button */
+.menu-tooltip {
+    position: absolute;
+    left: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--bg-tertiary); /* Match minimize button background */
+    color: var(--text-primary);
+    padding: var(--space-1) var(--space-2); /* Match minimize button padding */
+    border-radius: var(--radius-sm); /* Match minimize button border radius */
+    font-size: 0.7rem; /* Smaller font to match minimize button style */
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-normal), visibility var(--transition-normal);
+    z-index: 1001;
+    border: 1px solid var(--border-primary); /* Match minimize button border */
+}
+
+/* Show tooltip on hover */
+.menu-icon:hover .menu-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ===== SIDEBAR LOGO ===== */
+
+/* Logo container */
+.sidebar-logo {
+    position: relative;
+    margin-left: var(--space-3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-20px);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+    flex: 1; /* Take remaining space */
+    display: flex;
+    justify-content: flex-end; /* Right align when expanded */
+    align-items: center;
+}
+
+/* Show logo when sidebar is expanded */
+.sidebar:hover .sidebar-logo {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+.sidebar.expanded .sidebar-logo {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+/* Instant hide when not hovered and not expanded */
+.sidebar:not(:hover):not(.expanded) .sidebar-logo {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: none !important;
+}
+
+/* Logo image styling - doubled size and prominently placed */
+.logo-image {
+    height: 64px; /* Doubled from 32px */
+    width: auto;
+    display: block;
+    margin-right: var(--space-2); /* Add some margin from the right edge */
+}
+
+/* Logo tooltip - positioned to the right of logo, overlaying content */
+.logo-tooltip {
+    position: fixed; /* Use fixed positioning to overlay everything */
+    left: 100px; /* Moved 100px further right (was 50px, now 150px) */
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically with the logo */
+    background: none; /* Remove background */
+    color: var(--text-primary);
+    padding: 0; /* Remove padding */
+    border: none; /* Remove border */
+    font-size: 0.75rem; /* Smaller text size */
+    font-weight: 300; /* Thin font weight */
+    font-family: var(--font-primary); /* Ensure BraunLinear font is used */
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-normal), visibility var(--transition-normal);
+    z-index: 9999; /* Highest z-index to appear above everything */
+    pointer-events: none; /* Don't interfere with clicks */
+}
+
+/* Show logo tooltip on hover */
+.sidebar-logo:hover .logo-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ===== SIDEBAR CONTENT ===== */
+
+/* Main content area of sidebar */
+.sidebar-content {
+    flex: 1;
+    padding: var(--space-3) 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0; /* Allow flex shrinking */
+}
+
+/* ===== SEARCH SECTION ===== */
+
+/* Search section container */
+.search-section {
+    margin-bottom: var(--space-4);
+    padding: 0 var(--space-2);
+}
+
+/* Search input container */
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-md);
+    padding: var(--space-2);
+    height: 36px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-20px);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+/* Show search when sidebar is expanded - with instant hide on collapse */
+.sidebar:hover .search-container {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+.sidebar.expanded .search-container {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+/* Instant hide when not hovered and not expanded */
+.sidebar:not(:hover):not(.expanded) .search-container {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: none !important;
+}
+
+/* Search icon */
+.search-icon {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-right: var(--space-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+}
+
+/* Search input field */
+.search-input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 13px;
+    flex: 1;
+    outline: none;
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+}
+
+/* Search input placeholder */
+.search-input::placeholder {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+/* Hide placeholder when focused */
+.search-input:focus::placeholder {
+    opacity: 0;
+}
+
+/* Search container focus state */
+.search-container:focus-within {
+    border-color: var(--border-secondary);
+    background-color: var(--bg-secondary);
+}
+
+/* ===== MENU ITEMS ===== */
+
+/* Menu items container */
+.menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px; /* Reduced gap between menu items */
+    padding: 0; /* Remove padding to match bottom menu items */
+}
+
+/* Main menu items alignment */
+.menu-items .menu-item {
+    margin: 0 var(--space-2); /* Same margin as bottom menu items */
+    padding-left: 7px; /* Shift icons 5px right (2px + 5px = 7px) */
+}
+
+/* Bottom menu items container (Settings & Help) */
+.bottom-menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px; /* Same gap as main menu items */
+    padding: 0; /* Remove padding to match main menu items */
+    margin-top: var(--space-2); /* Space above since it's now below auth section */
+    /* Always visible like main menu items - no opacity/visibility changes */
+}
+
+/* Bottom menu items alignment */
+.bottom-menu-items .menu-item {
+    margin: 0 var(--space-2); /* Same margin as main menu items */
+    margin-left: 0px; /* Shift icons 5px left (16px - 5px = 11px) */
+}
+
+/* Bottom menu items text behavior - same as main menu items */
+.bottom-menu-items .menu-item-text {
+    /* Remove margin-left to match main menu items spacing */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-20px);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+/* Show bottom menu item text when sidebar is expanded */
+.sidebar:hover .bottom-menu-items .menu-item-text {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+.sidebar.expanded .bottom-menu-items .menu-item-text {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+/* Instant hide bottom menu text when not hovered and not expanded */
+.sidebar:not(:hover):not(.expanded) .bottom-menu-items .menu-item-text {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: none !important;
+}
+
+/* Individual menu item */
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: var(--space-2) var(--space-3); /* Reduced vertical padding */
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    font-size: 14px;
+    position: relative;
+    width: 100%;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    min-height: 36px; /* Reduced height */
+}
+
+/* Menu item hover effect */
+.menu-item:hover {
+    background-color: var(--surface-hover);
+}
+
+/* Menu item icon container - aligned with hamburger menu icon */
+.menu-item-icon {
+    width: 32px; /* Match hamburger icon width */
+    height: 32px; /* Match hamburger icon height */
+    margin-right: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--text-primary);
+}
+
+/* SVG icons within menu items */
+.menu-item-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* PNG icons within menu items */
+.menu-item-icon img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    filter: brightness(0) invert(1); /* Make PNG icons white to match theme */
+}
+
+/* Settings icon - triple size for more prominence */
+.menu-item-icon img[src*="settingsicon.PNG"] {
+    width: 60px; /* Triple the size from 20px to 60px */
+    height: 60px; /* Triple the size from 20px to 60px */
+}
+
+/* Menu item containing settings icon - adjust height to accommodate larger icon */
+.menu-item:has(img[src*="settingsicon.PNG"]) {
+    min-height: 68px; /* Increased to accommodate 60px icon plus padding */
+    align-items: center; /* Ensure proper vertical centering */
+}
+
+/* Menu item text */
+.menu-item-text {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Show menu item text when sidebar is expanded */
+.sidebar:hover .menu-item-text {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+.sidebar.expanded .menu-item-text {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+/* Instant hide when not hovered and not expanded */
+.sidebar:not(:hover):not(.expanded) .menu-item-text {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: none !important;
+}
+
+/* ===== POINT HISTORY SECTION ===== */
+
+/* Point history section container */
+.point-history-section {
+    margin: var(--space-4) var(--space-2) var(--space-4) var(--space-2); /* Add bottom margin */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-20px);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+    flex-shrink: 0; /* Prevent shrinking */
+    max-height: 200px; /* Limit height to create scrollable area */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    direction: rtl; /* Right-to-left to move scrollbar to left */
+}
+
+/* Show point history when sidebar is expanded */
+.sidebar:hover .point-history-section {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+.sidebar.expanded .point-history-section {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+/* Instant hide when not hovered and not expanded */
+.sidebar:not(:hover):not(.expanded) .point-history-section {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: none !important;
+}
+
+/* Point history section title */
+.section-title {
+    color: var(--text-tertiary);
+    font-size: 11px;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-3);
+    padding: 0 var(--space-1);
+    direction: ltr; /* Reset direction for text */
+}
+
+/* Point history grid */
+.point-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 40px; /* Each row will be 40px high */
+    gap: var(--space-2);
+    padding: 0 var(--space-1) var(--space-2) var(--space-1); /* Add bottom padding for scroll area */
+    height: auto; /* Allow natural height expansion */
+    direction: ltr; /* Reset direction for grid layout */
+}
+
+/* Individual point squares */
+.point-square {
+    width: 100%;
+    height: 40px;
+    min-height: 40px; /* Ensure minimum height */
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-fast);
+    cursor: pointer;
+    box-sizing: border-box; /* Include border in size calculations */
+}
+
+/* Point square hover effect */
+.point-square:hover {
+    background-color: var(--surface-hover);
+}
+
+/* Custom scrollbar for point history */
+.point-history-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.point-history-section::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+.point-history-section::-webkit-scrollbar-thumb {
+    background: var(--border-primary);
+    border-radius: 3px;
+    transition: background var(--transition-fast);
+}
+
+.point-history-section::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
+}
+
+/* Firefox scrollbar styling */
+.point-history-section {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-primary) var(--bg-tertiary);
+}
+
+/* ===== SIDEBAR FOOTER ===== */
+
+/* Footer container - positioned at bottom */
+.sidebar-footer {
+    margin-top: auto; /* Push to bottom */
+    padding: var(--space-2); /* Reduced padding */
+    /* Remove border-top to eliminate dividing line */
+    min-height: auto; /* Allow natural height */
+}
+
+/* Auth section container */
+.auth-section {
+    min-height: auto; /* Allow natural height */
+    margin-bottom: var(--space-1); /* Minimal buffer from bottom */
+}
+
+/* Auth buttons container - fixed height to prevent footer shifting */
+.auth-buttons {
+    display: flex;
+    gap: var(--space-2);
+    height: 40px; /* Fixed height to prevent shifting */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-20px);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+/* Show auth buttons when sidebar is expanded */
+.sidebar:hover .auth-buttons {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+.sidebar.expanded .auth-buttons {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+/* Instant hide when not hovered and not expanded */
+.sidebar:not(:hover):not(.expanded) .auth-buttons {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: none !important;
+}
+
+/* ===== USER PROFILE SECTION ===== */
+
+/* User profile container */
+.user-profile {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-20px);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+
+    /* Card styling */
+    background-color: #878484; /* Light grey background */
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    margin: 0 var(--space-1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+/* User profile hover effect */
+.user-profile:hover {
+    background-color: #4a4a4a; /* Slightly lighter on hover */
+    transform: translateX(0) translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Profile icon for collapsed state */
+.profile-icon-collapsed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border-radius: var(--radius-md);
+    background-color: transparent;
+}
+
+.profile-icon-collapsed:hover {
+    background-color: var(--surface-hover);
+}
+
+.profile-icon-img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    opacity: 0.8;
+    transition: opacity var(--transition-fast);
+}
+
+.profile-icon-collapsed:hover .profile-icon-img {
+    opacity: 1;
+}
+
+/* Show user profile when sidebar is expanded */
+.sidebar:hover .user-profile {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+.sidebar.expanded .user-profile {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity var(--transition-normal),
+                visibility var(--transition-normal),
+                transform var(--transition-normal);
+}
+
+/* Instant hide when not hovered and not expanded */
+.sidebar:not(:hover):not(.expanded) .user-profile {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: none !important;
+}
+
+/* User profile content layout */
+.user-profile-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: 0; /* Remove bottom margin since no button below */
+}
+
+/* User avatar container */
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+}
+
+/* Avatar image */
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Avatar placeholder (when no profile picture) */
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-bold);
+}
+
+/* User info container */
+.user-info {
+    flex: 1;
+    min-width: 0; /* Allow text to truncate */
+}
+
+/* Welcome message */
+.user-welcome {
+    color: #000000; /* Black text for better contrast on light grey */
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* User title (Builder/Founder) */
+.user-title {
+    color: #333333; /* Dark grey for subtitle */
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+    font-size: 0.8rem;
+    text-transform: capitalize;
+}
+
+
+
+/* Individual auth button */
+.auth-btn {
+    flex: 1;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-medium);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    height: 100%; /* Fill the fixed height container */
+}
+
+/* Remove duplicate auth button styles - already defined above */
+
+/* Auth button hover effect */
+.auth-btn:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--border-secondary);
+    transform: translateY(-1px);
+}
+
+/* Auth button active effect */
+.auth-btn:active {
+    transform: translateY(0);
+}
+
+/* Signup button specific styling */
+.signup-btn {
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+    border-color: var(--text-primary);
+}
+
+/* Signup button hover effect */
+.signup-btn:hover {
+    background-color: var(--interactive-hover);
+    border-color: var(--interactive-hover);
+}
+
+/* ===== MAIN CONTENT ===== */
+
+/* Main content area */
+.main-content {
+    margin-left: var(--sidebar-collapsed-width);
+    padding: var(--space-6);
+    min-height: 100vh;
+    background-color: var(--bg-secondary);
+    transition: margin-left var(--transition-sidebar);
+
+    /* Performance optimizations for smooth content shifting */
+    will-change: margin-left;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* Adjust main content when sidebar is expanded */
+.sidebar:hover ~ .main-content,
+.sidebar.expanded ~ .main-content {
+    margin-left: var(--sidebar-expanded-width);
+}
+
+/* Adjust main content when sidebar is minimized */
+.sidebar.minimized ~ .main-content {
+    margin-left: var(--sidebar-minimized-width);
+}
+
+/* Content placeholder styling */
+.content-placeholder {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-6);
+    background-color: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-primary);
+}
+
+.content-placeholder h1 {
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-4);
+}
+
+.content-placeholder p,
+.content-placeholder li {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-3);
+}
+
+.content-placeholder ul {
+    padding-left: var(--space-5);
+}
+
+.content-placeholder strong {
+    color: var(--text-primary);
+    font-weight: var(--font-weight-bold);
+}
+
+/* ===== FONT EXAMPLES SECTION ===== */
+
+/* Font examples container */
+.font-examples {
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-primary);
+}
+
+.font-examples h2 {
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-4);
+    font-size: 1.5rem;
+}
+
+.font-examples h3 {
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-medium);
+    margin: var(--space-5) 0 var(--space-3) 0;
+    font-size: 1.25rem;
+}
+
+/* Font sample styles */
+.font-sample {
+    font-family: var(--font-primary);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-3);
+    padding: var(--space-3);
+    background-color: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--border-secondary);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Specific font weight classes */
+.font-thin {
+    font-weight: 300; /* BraunLinear Thin */
+}
+
+.font-light {
+    font-weight: 350; /* BraunLinear Light */
+}
+
+.font-regular {
+    font-weight: 400; /* BraunLinear Regular */
+}
+
+.font-medium {
+    font-weight: 500; /* BraunLinear Medium */
+}
+
+.font-bold {
+    font-weight: 700; /* BraunLinear Bold */
+}
+
+/* Highlight different weights in context */
+.font-examples p {
+    font-family: var(--font-primary);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-3);
+}
+
+.font-examples .font-medium {
+    color: var(--text-primary);
+}
+
+.font-examples .font-bold {
+    color: var(--text-primary);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Mobile and tablet adjustments */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-collapsed-width: 50px;
+        --sidebar-expanded-width: 280px;
+    }
+    
+    .main-content {
+        padding: var(--space-4);
+    }
+    
+    .content-placeholder {
+        padding: var(--space-4);
+    }
+}
+
+/* ===== MACOS SPECIFIC OPTIMIZATIONS ===== */
+
+/* Detect macOS and apply specific optimizations */
+@supports (-webkit-backdrop-filter: blur(10px)) {
+    .sidebar {
+        /* Enhanced GPU acceleration for macOS */
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+
+        /* Use hardware acceleration more aggressively */
+        transition: width var(--transition-sidebar), transform 0ms;
+    }
+
+    .main-content {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Optimize text rendering during animations */
+    .sidebar * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Additional macOS optimizations when class is applied via JavaScript */
+body.macos .sidebar {
+    /* Force compositing layer for smoother animations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    isolation: isolate;
+
+    /* Optimize transition timing specifically for macOS */
+    transition: width 320ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+body.macos .main-content {
+    /* Sync main content transition with sidebar */
+    transition: margin-left 320ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+body.macos .menu-item-text,
+body.macos .search-container,
+body.macos .auth-buttons,
+body.macos .point-history-section,
+body.macos .sidebar-logo {
+    /* Smoother text and element transitions on macOS */
+    transition: opacity 280ms cubic-bezier(0.23, 1, 0.32, 1),
+                visibility 280ms cubic-bezier(0.23, 1, 0.32, 1),
+                transform 280ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ===== AUTHENTICATION MODALS ===== */
+
+/* Auth overlay - covers entire screen */
+.auth-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* Show overlay when active */
+.auth-overlay.active {
+    display: flex;
+}
+
+/* Auth modal container */
+.auth-modal {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--text-primary);
+    border-radius: 0; /* Sharp corners as requested */
+    width: 400px;
+    max-width: 90vw;
+    padding: 0;
+    position: relative;
+    display: none;
+    font-family: var(--font-primary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Show active modal */
+.auth-modal.active {
+    display: block;
+}
+
+/* Auth modal header */
+.auth-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4) var(--space-4) var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.auth-modal-header h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+    font-size: 1.5rem;
+}
+
+/* Close button */
+.auth-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition-fast);
+}
+
+.auth-close-btn:hover {
+    color: var(--text-secondary);
+}
+
+/* Auth form */
+.auth-form {
+    padding: var(--space-4);
+}
+
+/* Input groups */
+.auth-input-group {
+    margin-bottom: var(--space-4);
+}
+
+.auth-input-group label {
+    display: block;
+    margin-bottom: var(--space-2);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+    font-size: 0.9rem;
+}
+
+.auth-input-group input {
+    width: 100%;
+    padding: var(--space-3);
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0; /* Sharp corners */
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+    font-size: 0.9rem;
+    transition: border-color var(--transition-fast);
+    box-sizing: border-box;
+}
+
+.auth-input-group input:focus {
+    outline: none;
+    border-color: var(--text-primary);
+    background-color: var(--bg-secondary);
+}
+
+.auth-input-group input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Submit button */
+.auth-submit-btn {
+    width: 100%;
+    padding: var(--space-3);
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+    border: 1px solid var(--text-primary);
+    border-radius: 0; /* Sharp corners */
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-bottom: var(--space-3);
+}
+
+.auth-submit-btn:hover {
+    background-color: var(--text-secondary);
+    border-color: var(--text-secondary);
+}
+
+.auth-submit-btn:active {
+    transform: translateY(1px);
+}
+
+.auth-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Error message */
+.auth-error {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    margin-bottom: var(--space-3);
+    min-height: 1rem;
+    font-family: var(--font-primary);
+}
+
+/* Switch between login/signup */
+.auth-switch {
+    text-align: center;
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+    font-family: var(--font-primary);
+}
+
+.auth-switch a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.auth-switch a:hover {
+    color: var(--text-secondary);
+    text-decoration: underline;
+}
+
+/* ===== EDIT PROFILE MODAL ===== */
+
+/* Edit profile modal - similar to auth modals but for profile editing */
+#edit-profile-modal {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--text-primary);
+    border-radius: 0; /* Sharp corners */
+    width: 450px;
+    max-width: 90vw;
+    padding: 0;
+    position: relative;
+    display: none;
+    font-family: var(--font-primary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Show edit profile modal when active */
+#edit-profile-modal.active {
+    display: block;
+}
+
+/* Edit profile form styling - reuse auth form styles */
+.edit-profile-form {
+    padding: var(--space-4);
+}
+
+.edit-profile-form .auth-input-group {
+    margin-bottom: var(--space-4);
+}
+
+.edit-profile-form .auth-input-group label {
+    display: block;
+    margin-bottom: var(--space-2);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+    font-size: 0.9rem;
+}
+
+.edit-profile-form .auth-input-group input,
+.edit-profile-form .auth-input-group select {
+    width: 100%;
+    padding: var(--space-3);
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0; /* Sharp corners */
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+    font-size: 0.9rem;
+    transition: border-color var(--transition-fast);
+    box-sizing: border-box;
+}
+
+.edit-profile-form .auth-input-group input:focus,
+.edit-profile-form .auth-input-group select:focus {
+    outline: none;
+    border-color: var(--text-primary);
+    background-color: var(--bg-secondary);
+}
+
+/* Profile picture upload section */
+.profile-picture-section {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.profile-picture-preview {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--border-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-tertiary);
+    flex-shrink: 0;
+}
+
+.profile-picture-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-picture-placeholder {
+    color: var(--text-tertiary);
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-bold);
+}
+
+.profile-picture-upload {
+    flex: 1;
+}
+
+.upload-btn {
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0;
+    font-family: var(--font-primary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.upload-btn:hover {
+    background-color: var(--surface-hover);
+}
+
+/* ===== ACCESSIBILITY ===== */
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --bg-primary: #000000;
+        --bg-secondary: #000000;
+        --text-primary: #ffffff;
+        --border-primary: #ffffff;
+    }
+}

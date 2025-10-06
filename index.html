@@ -202,7 +202,7 @@
               <button class="px-12 py-6 text-xl bg-black text-white border-2 border-white rounded-xl hover:bg-gray-900 transition-colors braun-regular">
                 Newsletter
               </button>
-              <button class="px-12 py-6 text-xl bg-black text-white border-2 border-white rounded-xl hover:bg-gray-900 transition-colors braun-regular">
+              <button id="launch-homara-btn" class="px-12 py-6 text-xl bg-black text-white border-2 border-white rounded-xl hover:bg-gray-900 transition-colors braun-regular">
                 Launch Homara
               </button>
               <button class="px-12 py-6 text-xl bg-black text-white border-2 border-white rounded-xl hover:bg-gray-900 transition-colors braun-regular">
@@ -349,12 +349,12 @@
           headerElements.forEach(element => {
             element.style.opacity = '1';
           });
-        }, 6000);
+        }, 5700);
 
         setTimeout(() => {
           // 7. Background fades in last
           background.style.opacity = '1';
-        }, 6500);
+        }, 6300);
       }
 
       // Start loading sequence when page loads
@@ -408,6 +408,20 @@
           // Switch to light mode
           applyTheme('light');
           localStorage.setItem('theme', 'light');
+        }
+      });
+    </script>
+
+    <script>
+      // Launch Homara button functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const launchButton = document.getElementById('launch-homara-btn');
+
+        if (launchButton) {
+          launchButton.addEventListener('click', function() {
+            // Navigate to the MenuLAUNCH page in the same window
+            window.location.href = 'MenuLAUNCH/index.html';
+          });
         }
       });
     </script>
