@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background-color: black !important;
+}
+
+@font-face {
+  font-family: 'NDOT47';
+  src: url('/assets/fonts/ndot-47-inspired-by-nothing.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'BraunLinear';
+  src: url('/assets/fonts/BraunLinear-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'BraunLinear';
+  src: url('/assets/fonts/BraunLinear-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+.ndot-font {
+  font-family: 'NDOT47', system-ui, sans-serif;
+}
+
+.braun-regular {
+  font-family: 'BraunLinear', system-ui, sans-serif;
+  font-weight: normal;
+}
+
+.braun-bold {
+  font-family: 'BraunLinear', system-ui, sans-serif;
+  font-weight: bold;
+}
