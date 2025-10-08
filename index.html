@@ -4,151 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homara</title>
-    <link rel="icon" type="image/png" href="/assets/images/whitelogo (1).png">
-    <link rel="shortcut icon" type="image/png" href="/assets/images/whitelogo (1).png">
-    <link rel="stylesheet" href="/src/index.css" />
-    <style>
-      @font-face {
-        font-family: 'NDOT47';
-        src: url('/assets/fonts/ndot-47-inspired-by-nothing.otf') format('opentype');
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-      }
-      @font-face {
-        font-family: 'Speran1315';
-        src: url('/assets/fonts/speran-13-15.otf') format('opentype');
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-      }
-      @font-face {
-        font-family: 'BraunLinear';
-        src: url('/assets/fonts/BraunLinear-Regular.woff2') format('woff2');
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-      }
-      @font-face {
-        font-family: 'BraunLinear';
-        src: url('/assets/fonts/BraunLinear-Bold.woff2') format('woff2');
-        font-weight: bold;
-        font-style: normal;
-        font-display: swap;
-      }
-      .ndot-font {
-        font-family: 'NDOT47', system-ui, sans-serif;
-      }
-      .speran-font {
-        font-family: 'Speran1315', system-ui, sans-serif;
-      }
-      .speran-font-scaled {
-        font-family: 'Speran1315', system-ui, sans-serif;
-        font-size: 0.7em;
-      }
-      .braun-regular {
-        font-family: 'BraunLinear', system-ui, sans-serif;
-        font-weight: normal;
-      }
-      .braun-bold {
-        font-family: 'BraunLinear', system-ui, sans-serif;
-        font-weight: bold;
-      }
-
-      /* Light/Dark Mode Styles */
-      .light-mode {
-        background-color: white !important;
-        color: #333 !important;
-      }
-      .light-mode .text-gray-200 {
-        color: #333 !important;
-      }
-      .light-mode canvas {
-        filter: invert(1);
-      }
-      .light-mode .bg-black {
-        background-color: white !important;
-        color: #333 !important;
-        border-color: #333 !important;
-      }
-      .light-mode .border-white {
-        border-color: #333 !important;
-      }
-      .light-mode .text-white {
-        color: #333 !important;
-      }
-      .light-mode .hover\\:bg-gray-900:hover {
-        background-color: #f0f0f0 !important;
-      }
-
-      #theme-toggle {
-        transition: all 0.3s ease;
-      }
-
-      /* Loading Animation Styles */
-      .fade-in {
-        opacity: 0;
-        transition: opacity 1s ease-in-out;
-      }
-
-      .fade-in.visible {
-        opacity: 1;
-      }
-
-      .fade-in-fast {
-        opacity: 0;
-        transition: opacity 0.8s ease-in-out;
-      }
-
-      .fade-in-fast.visible {
-        opacity: 1;
-      }
-
-      /* Initially hide elements that should fade in */
-      #background-canvas {
-        opacity: 0;
-        transition: opacity 1.5s ease-in-out;
-      }
-
-      .hero-title {
-        opacity: 0;
-        transition: opacity 1s ease-in-out;
-      }
-
-      .hero-description p {
-        opacity: 0;
-        transition: opacity 0.8s ease-in-out;
-      }
-
-      .hero-buttons {
-        opacity: 0;
-        transition: opacity 0.8s ease-in-out;
-      }
-
-      .header-content {
-        opacity: 0;
-        transition: opacity 0.8s ease-in-out;
-      }
-
-      /* Rotating text animation */
-      .animate-spin-slow {
-        animation: spin 10s linear infinite;
-      }
-
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      /* Light mode text color */
-      .light-mode #rotating-text text {
-        fill: #333 !important;
-      }
-    </style>
+    <link rel="icon" type="image/png" href="assets/images/whitelogo (1).png">
+    <link rel="shortcut icon" type="image/png" href="assets/images/whitelogo (1).png">
+    <link rel="stylesheet" href="src/index.css" />
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   </head>
   <body>
     <div class="relative min-h-screen text-gray-200">
@@ -160,7 +20,7 @@
         <div class="flex items-center justify-between">
           <!-- Logo and Company Name -->
           <div class="flex items-center space-x-4 header-content">
-            <img src="/assets/images/whitelogo (1).png" alt="Homara Logo" width="60" height="60" class="object-contain">
+            <img src="assets/images/whitelogo (1).png" alt="Homara Logo" width="60" height="60" class="object-contain">
             <h1 class="text-3xl font-light tracking-wide braun-regular">Homara</h1>
           </div>
 
@@ -181,7 +41,7 @@
                 </svg>
               </div>
               <!-- Lightbulb Icon -->
-              <img id="theme-icon" src="/assets/images/light mode bulb-Photoroom.png" alt="Toggle Theme" width="20" height="20" class="object-contain relative z-10">
+              <img id="theme-icon" src="assets/images/light mode bulb-Photoroom.png" alt="Toggle Theme" width="20" height="20" class="object-contain relative z-10">
             </div>
           </button>
         </div>
@@ -193,7 +53,7 @@
         <section class="h-screen flex items-center justify-center px-8">
           <div class="text-center max-w-6xl">
             <h1 class="text-8xl font-bold mb-8 leading-none whitespace-nowrap hero-title"><span class="braun-regular">Find Your</span> <span class="speran-font-scaled">Community</span></h1>
-            <div class="text-2xl mb-12 leading-relaxed space-y-2 braun-regular hero-description">
+            <div class="text-2xl mb-12 leading-relaxed text-spacing-medium braun-regular hero-description">
               <p id="hero-line-1">A new take on digital connection.</p>
               <p id="hero-line-2">No more algorithms, no more mindless consumption.</p>
               <p id="hero-line-3">A place for art and creativity to truly come together.</p>
@@ -213,29 +73,29 @@
         </section>
 
         <!-- Content Section 1 -->
-        <section class="h-5/8 flex items-start justify-start px-8 py-10">
-          <div class="w-1/2 text-left space-y-4">
-            <h2 class="text-3xl braun-bold">Current Digital Media is Designed to Isolate Us.</h2>
-            <p class="text-lg leading-relaxed braun-regular">
+        <section class="flex items-start justify-start px-8 py-10" style="margin-bottom: 1rem;">
+          <div class="w-1/2 text-left text-spacing">
+            <h2 class="text-3xl braun-bold scroll-fade-in">Current Digital Media is Designed to Isolate Us.</h2>
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in-delay-1">
               We believe that sharing art and creative work digitally shouldn't be subjected to a ranking algorithm, or metrics
               such as likes or followers. Putting yourself out there is meaningful, and can be scary, especially when it
               comes to things you care about.
             </p>
-            <p class="text-lg leading-relaxed braun-regular">
-              We want to make it easier for people to share both share their work with others in a more organic and
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in-delay-2">
+              We want to make it easier for people to share both their work with others in a more organic and
               centered way, and also provide people with a place to go to learn about the other creators in their area.
             </p>
           </div>
         </section>
 
         <!-- Content Section 2 -->
-        <section class="h-5/8 flex items-center justify-end px-8 py-10">
-          <div class="w-1/2 text-left space-y-4">
-            <h2 class="text-2xl braun-bold">Our Goal:</h2>
-            <p class="text-lg leading-relaxed braun-regular">
+        <section class="flex items-center justify-end px-8 py-10" style="margin-bottom: 1rem;">
+          <div class="w-1/2 text-left text-spacing">
+            <h2 class="text-2xl braun-bold scroll-fade-in">Our Goal:</h2>
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in-delay-1">
               Finding a healthy balance of consumption that fuels creative output instead of dampening it. We all know we are addicted to technology but there is nothing we can do about it.
             </p>
-            <p class="text-lg leading-relaxed braun-regular">
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in-delay-2">
               Our desire to be seen and connected with each other has been taken advantage of
               through the artificial connectivity approach our existing tech corporations have created. The more time we spend distracted by the illusion of connectivity,
               wasting our time looking at ads disguised amongst the people and things we care about
@@ -245,16 +105,16 @@
         </section>
 
         <!-- Content Section 3 -->
-        <section class="h-5/8 flex items-start justify-start px-8 py-10">
-          <div class="w-1/2 text-left space-y-4">
-            <h2 class="text-2xl braun-bold">
-              These platforms are designed to exploit vulnerabilities in our psychology. Homara is designed to oppose this practice.
+        <section class="flex items-start justify-start px-8 py-10" style="margin-bottom: 1rem;">
+          <div class="w-1/2 text-left text-spacing">
+            <h2 class="text-2xl braun-bold scroll-fade-in">
+              These platforms are designed to exploit vulnerabilities in our psychology, Homara is designed to oppose this practice.
             </h2>
-            <p class="text-lg leading-relaxed braun-regular">
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in-delay-1">
               We would love to hear input from all people who visit this site.
               This isn't a big company or a corporation with monetary based goals
             </p>
-            <p class="text-lg leading-relaxed braun-regular">
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in-delay-2">
               We are a group of friends and creators who want to help foster a digital age that helps
               people actually connect with each other.
             </p>
@@ -262,24 +122,24 @@
         </section>
 
         <!-- Content Section 4 -->
-        <section class="h-5/8 flex items-center justify-center px-8 py-10">
-          <div class="w-1/2 text-center space-y-4">
-            <p class="text-lg leading-relaxed braun-regular">
+        <section class="flex items-center justify-center px-8 py-10" style="margin-bottom: 1rem;">
+          <div class="w-1/2 text-center text-spacing">
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in">
               Homara will never have ads, or try and drive engagement for the sake of selling your data.
             </p>
           </div>
         </section>
 
         <!-- Content Section 5 -->
-         <section class="h-5/8 flex items-center justify-end px-8 py-10">
-          <div class="w-1/2 text-left space-y-4">
-            <h2 class="text-2xl braun-bold">This is just the beginning</h2>
-            <p class="text-lg leading-relaxed braun-regular">
+         <section class="flex items-center justify-end px-8 py-10">
+          <div class="w-1/2 text-left text-spacing">
+            <h2 class="text-2xl braun-bold scroll-fade-in">This is just the beginning:</h2>
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in-delay-1">
               Our plan for Homara is much greater than just a website. In the coming months we will be releasing a desktop app
               that will be able to function as the full version of our project. Anyone will be able to create their own point cloud community
               and share it with their friends, for as low of a cost as we possibly can.
             </p>
-            <p class="text-lg leading-relaxed braun-regular">
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in-delay-2">
               The app will allow for livestreams, so you can share and archive
               live shows or performances digitally, receive donations or tips on your page, or embed and show users your own website.
             </p>
@@ -288,24 +148,24 @@
 
         <!-- Content Section 6 -->
         <section class="h-5/8 flex items-center justify-center px-8 py-10">
-          <div class="w-1/2 text-center space-y-4">
-            <p class="text-lg leading-relaxed braun-regular">
+          <div class="w-1/2 text-center text-spacing">
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in">
               Eventually, we will use the Homara app to provide information about real world pop up events
               for creators and users in our Flagship cities.
             </p>
-            <p class="text-lg leading-relaxed braun-regular">
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in-delay-1">
               With your help we want to help turn these digital interactions into real life connection through
-              our events,
+              our events.
             </p>
-            <p class="text-lg leading-relaxed braun-regular">
-              creating a safe place where members of these creative communities can truly come together.
+            <p class="text-lg leading-relaxed braun-regular scroll-fade-in-delay-2">
+              Thus creating a safe place where members of these creative communities can truly come together.
             </p>
           </div>
         </section>
       </div>
     </div>
 
-    <script type="module" src="/src/main.js"></script>
+    <script src="src/main.js"></script>
 
     <script>
       // Loading Animation Sequence
@@ -424,6 +284,57 @@
           });
         }
       });
+    </script>
+
+    <script>
+      // Scroll-triggered animations
+      function initScrollAnimations() {
+        const scrollElements = document.querySelectorAll('.scroll-fade-in, .scroll-fade-in-delay-1, .scroll-fade-in-delay-2');
+
+        const elementInView = (el, dividend = 1) => {
+          const elementTop = el.getBoundingClientRect().top;
+          return (
+            elementTop <=
+            (window.innerHeight || document.documentElement.clientHeight) / dividend
+          );
+        };
+
+        const elementOutofView = (el) => {
+          const elementTop = el.getBoundingClientRect().top;
+          return (
+            elementTop >
+            (window.innerHeight || document.documentElement.clientHeight)
+          );
+        };
+
+        const displayScrollElement = (element) => {
+          element.classList.add('visible');
+        };
+
+        const hideScrollElement = (element) => {
+          element.classList.remove('visible');
+        };
+
+        const handleScrollAnimation = () => {
+          scrollElements.forEach((el) => {
+            if (elementInView(el, 1.25)) {
+              displayScrollElement(el);
+            } else if (elementOutofView(el)) {
+              hideScrollElement(el);
+            }
+          });
+        };
+
+        window.addEventListener('scroll', () => {
+          handleScrollAnimation();
+        });
+
+        // Initial check for elements already in view
+        handleScrollAnimation();
+      }
+
+      // Initialize scroll animations when DOM is loaded
+      document.addEventListener('DOMContentLoaded', initScrollAnimations);
     </script>
   </body>
 </html>

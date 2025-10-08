@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -8,9 +9,18 @@ body {
   background-color: black !important;
 }
 
+/* Font faces */
 @font-face {
   font-family: 'NDOT47';
   src: url('/assets/fonts/ndot-47-inspired-by-nothing.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Speran1315';
+  src: url('/assets/fonts/speran-13-15.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -26,14 +36,24 @@ body {
 
 @font-face {
   font-family: 'BraunLinear';
-  src: url('/assets/fonts/BraunLinear-Bold.woff2') format('woff2');
+  src: url('../assets/fonts/BraunLinear-Bold.woff2') format('woff2');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
 
+/* Font utility classes */
 .ndot-font {
   font-family: 'NDOT47', system-ui, sans-serif;
+}
+
+.speran-font {
+  font-family: 'Speran1315', system-ui, sans-serif;
+}
+
+.speran-font-scaled {
+  font-family: 'Speran1315', system-ui, sans-serif;
+  font-size: 0.7em;
 }
 
 .braun-regular {
@@ -44,4 +64,243 @@ body {
 .braun-bold {
   font-family: 'BraunLinear', system-ui, sans-serif;
   font-weight: bold;
+}
+
+/* Layout utilities */
+.relative { position: relative; }
+.fixed { position: fixed; }
+.absolute { position: absolute; }
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+.top-0 { top: 0; }
+.left-0 { left: 0; }
+.right-0 { right: 0; }
+.z-10 { z-index: 10; }
+.z-50 { z-index: 50; }
+
+/* Sizing utilities */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.w-10 { width: 2.5rem; }
+.h-10 { height: 2.5rem; }
+.w-1\/2 { width: 50%; }
+.h-screen { height: 100vh; }
+.h-5\/8 { height: 62.5vh; }
+.min-h-screen { min-height: 100vh; }
+.max-w-6xl { max-width: 72rem; }
+
+/* Flexbox utilities */
+.flex { display: flex; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-start { justify-content: flex-start; }
+.justify-end { justify-content: flex-end; }
+
+/* Spacing utilities */
+.space-x-4 > * + * { margin-left: 1rem; }
+.space-x-8 > * + * { margin-left: 2rem; }
+
+.px-8 { padding-left: 2rem; padding-right: 2rem; }
+.px-12 { padding-left: 3rem; padding-right: 3rem; }
+.py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mb-12 { margin-bottom: 3rem; }
+.mt-16 { margin-top: 4rem; }
+.pt-1 { padding-top: 0.25rem; }
+.pt-2 { padding-top: 0.5rem; }
+.pt-3 { padding-top: 0.75rem; }
+.pt-5 { padding-top: 1.25rem; }
+.pb-1 { padding-bottom: 0.25rem; }
+.pb-2 { padding-bottom: 0.5rem; }
+.pb-5 { padding-bottom: 1.25rem; }
+
+/* Text utilities */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.text-8xl { font-size: 6rem; line-height: 1; }
+.text-\[7\.5px\] { font-size: 7.5px; }
+.font-light { font-weight: 300; }
+.font-bold { font-weight: 700; }
+.leading-none { line-height: 1; }
+.leading-relaxed { line-height: 1.625; }
+.tracking-wide { letter-spacing: 0.025em; }
+.whitespace-nowrap { white-space: nowrap; }
+
+/* Color utilities */
+.text-gray-200 { color: rgb(229 231 235); }
+.text-white { color: rgb(255 255 255); }
+.bg-black { background-color: rgb(0 0 0); }
+.bg-transparent { background-color: transparent; }
+.bg-opacity-20 { background-color: rgba(0, 0, 0, 0.2); }
+.fill-white { fill: rgb(255 255 255); }
+
+/* Border utilities */
+.border-2 { border-width: 2px; }
+.border-white { border-color: rgb(255 255 255); }
+.rounded-xl { border-radius: 0.75rem; }
+
+/* Object utilities */
+.object-contain { object-fit: contain; }
+
+/* Transition utilities */
+.transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Hover utilities */
+.hover\:bg-gray-900:hover { background-color: rgb(17 24 39); }
+.hover\:bg-opacity-20:hover { background-color: rgba(0, 0, 0, 0.2); }
+
+/* Animation utilities */
+.animate-spin-slow {
+  animation: spin 10s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Light/Dark Mode Styles */
+.light-mode {
+  background-color: white !important;
+  color: #333 !important;
+}
+
+.light-mode .text-gray-200 { color: #333 !important; }
+.light-mode canvas { filter: invert(1); }
+.light-mode .bg-black { background-color: white !important; color: #333 !important; border-color: #333 !important; }
+.light-mode .border-white { border-color: #333 !important; }
+.light-mode .text-white { color: #333 !important; }
+.light-mode .hover\:bg-gray-900:hover { background-color: #f0f0f0 !important; }
+.light-mode #rotating-text text { fill: #333 !important; }
+.light-mode .hero-buttons button { border-color: #333 !important; outline-color: #333 !important; }
+.light-mode .hero-buttons button:hover,
+.light-mode .hero-buttons button:focus { border-color: #333 !important; outline-color: #333 !important; }
+
+/* Loading Animation Styles */
+.fade-in { opacity: 0; transition: opacity 1s ease-in-out; }
+.fade-in.visible { opacity: 1; }
+.fade-in-fast { opacity: 0; transition: opacity 0.8s ease-in-out; }
+.fade-in-fast.visible { opacity: 1; }
+
+/* Initially hide elements that should fade in */
+#background-canvas { opacity: 0; transition: opacity 1.5s ease-in-out; }
+.hero-title { opacity: 0; transition: opacity 1s ease-in-out; }
+.hero-description p { opacity: 0; transition: opacity 0.8s ease-in-out; }
+.hero-buttons { opacity: 0; transition: opacity 0.8s ease-in-out; }
+.header-content { opacity: 0; transition: opacity 0.8s ease-in-out; }
+
+/* Button styling */
+button {
+  border: none;
+  outline: none;
+}
+
+button:focus {
+  outline: none;
+  border: none;
+}
+
+#theme-toggle {
+  transition: all 0.3s ease;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+#theme-toggle:focus {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Scroll-triggered animations */
+.scroll-fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-fade-in-delay-1 {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s;
+}
+
+.scroll-fade-in-delay-1.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-fade-in-delay-2 {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out 0.4s, transform 0.8s ease-out 0.4s;
+}
+
+.scroll-fade-in-delay-2.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Consistent text spacing */
+.text-spacing > * {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.text-spacing > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Medium text spacing for hero sections */
+.text-spacing-medium > * {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.text-spacing-medium > *:last-child {
+  margin-bottom: 0;
+}
+/* Content section spacing utilities */
+.section-gap-small {
+  margin-bottom: 2rem; /* 32px gap between sections */
+}
+
+.section-gap-tiny {
+  margin-bottom: 1rem; /* 16px gap between sections */
+}
+
+/* Hero buttons with white outlines */
+.hero-buttons button {
+  border: 2px solid white !important;
+  outline: 2px solid white !important;
+  outline-offset: -2px;
+}
+
+.hero-buttons button:hover,
+.hero-buttons button:focus {
+  border: 2px solid white !important;
+  outline: 2px solid white !important;
 }

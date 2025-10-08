@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 // Initialize the particle network background
 function initBackgroundCanvas() {
   const canvas = document.getElementById('background-canvas');
@@ -55,7 +53,6 @@ function initBackgroundCanvas() {
   scene.add(particleSystem);
 
   // Create connections between particles
-  const lineGeometry = new THREE.BufferGeometry();
   const lineMaterial = new THREE.LineBasicMaterial({
     color: 0x606060,
     transparent: true,
@@ -140,5 +137,10 @@ function initBackgroundCanvas() {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+  // Check if THREE is loaded
+  if (typeof THREE === 'undefined') {
+    console.error('THREE.js not loaded!');
+    return;
+  }
   initBackgroundCanvas();
 });
